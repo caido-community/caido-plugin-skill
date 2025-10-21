@@ -25,22 +25,27 @@ Install directly from GitHub to your skills directory:
 
 **Global Installation (Available Everywhere):**
 ```bash
-# Navigate to your Claude skills directory
-cd ~/.claude/skills
+# Clone the repository
+git clone https://github.com/caido-community/caido-plugin-skill.git /tmp/caido-plugin-skill
 
-# Clone the skill
-git clone https://github.com/caido-community/caido-plugin-skill.git
+# Copy just the skill to your Claude skills directory
+cp -r /tmp/caido-plugin-skill/skills/caido-plugin-dev ~/.claude/skills/
 
-# The skill is ready to use (no build step required)
+# Clean up
+rm -rf /tmp/caido-plugin-skill
 ```
 
 **Project-Specific Installation:**
 ```bash
-# Install in a specific project
-cd /path/to/your/project
-mkdir -p .claude/skills
-cd .claude/skills
-git clone https://github.com/caido-community/caido-plugin-skill.git
+# Clone the repository
+git clone https://github.com/caido-community/caido-plugin-skill.git /tmp/caido-plugin-skill
+
+# Copy just the skill to your project
+mkdir -p /path/to/your/project/.claude/skills
+cp -r /tmp/caido-plugin-skill/skills/caido-plugin-dev /path/to/your/project/.claude/skills/
+
+# Clean up
+rm -rf /tmp/caido-plugin-skill
 ```
 
 ### Option 2: Download Release
