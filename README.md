@@ -58,7 +58,7 @@ rm -rf /tmp/caido-plugin-skill
 
 ### Verify Installation
 
-Run `/help` to confirm the skill is loaded, then ask Claude to "create a Caido plugin that does X" or "help me develop a Caido frontend plugin".
+Ask Claude "what claude skills do you have" and `caido-plugin-dev` should appear in the list.
 
 ## Quick Start
 
