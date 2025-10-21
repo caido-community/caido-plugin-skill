@@ -25,7 +25,7 @@ This skill can be installed via the Claude Code plugin system or manually.
 
 ```bash
 # Add this repository as a marketplace
-/plugin marketplace add rez0/caido-plugin-skill
+/plugin marketplace add caido-community/caido-plugin-skill
 
 # Install the plugin
 /plugin install caido-plugin-skill@caido-plugin-dev
@@ -46,7 +46,7 @@ Install directly from GitHub to your skills directory:
 cd ~/.claude/skills
 
 # Clone the skill
-git clone https://github.com/rez0/caido-plugin-skill.git
+git clone https://github.com/caido-community/caido-plugin-skill.git
 
 # The skill is ready to use (no build step required)
 ```
@@ -57,12 +57,12 @@ git clone https://github.com/rez0/caido-plugin-skill.git
 cd /path/to/your/project
 mkdir -p .claude/skills
 cd .claude/skills
-git clone https://github.com/rez0/caido-plugin-skill.git
+git clone https://github.com/caido-community/caido-plugin-skill.git
 ```
 
 ### Option 3: Download Release
 
-1. Download the latest release from [GitHub Releases](https://github.com/rez0/caido-plugin-skill/releases)
+1. Download the latest release from [GitHub Releases](https://github.com/caido-community/caido-plugin-skill/releases)
 2. Extract to:
    - Global: `~/.claude/skills/caido-plugin-dev`
    - Project: `/path/to/your/project/.claude/skills/caido-plugin-dev`
@@ -219,7 +219,7 @@ The skill references these community plugins as learning resources:
 - [Claude Code Plugins Documentation](https://docs.claude.com/en/docs/claude-code/plugins)
 - [Caido Developer Docs](https://developer.caido.io/)
 - [Caido Community GitHub](https://github.com/caido-community)
-- [GitHub Issues](https://github.com/rez0/caido-plugin-skill/issues)
+- [GitHub Issues](https://github.com/caido-community/caido-plugin-skill/issues)
 
 ## Contributing
 
