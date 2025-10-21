@@ -19,24 +19,7 @@ Claude autonomously uses this skill when you request Caido plugin development, l
 
 ## Installation
 
-This skill can be installed via the Claude Code plugin system or manually.
-
-### Option 1: Via Plugin System (Recommended)
-
-```bash
-# Add this repository as a marketplace
-/plugin marketplace add caido-community/caido-plugin-skill
-
-# Install the plugin
-/plugin install caido-plugin-skill@caido-plugin-dev
-
-# Verify installation
-/help
-```
-
-Verify installation by running `/help` to confirm the skill is available.
-
-### Option 2: Manual Git Clone
+### Option 1: Manual Git Clone
 
 Install directly from GitHub to your skills directory:
 
@@ -60,7 +43,7 @@ cd .claude/skills
 git clone https://github.com/caido-community/caido-plugin-skill.git
 ```
 
-### Option 3: Download Release
+### Option 2: Download Release
 
 1. Download the latest release from [GitHub Releases](https://github.com/caido-community/caido-plugin-skill/releases)
 2. Extract to:
@@ -138,104 +121,7 @@ The skill provides:
 - **Best Practices** - TypeScript patterns, error handling, security, performance
 - **Troubleshooting** - Common issues and solutions
 
-## Dependencies
-
-None - this is a pure documentation skill with no runtime dependencies.
-
-For actual Caido plugin development, you'll need:
-- Node.js 18+ or 20+
-- pnpm package manager
-- Caido application
-
-## What is Caido?
-
-Caido is a lightweight web security auditing toolkit designed for penetration testing and vulnerability assessment. It's similar to Burp Suite but built with modern technologies (Vue.js frontend, Rust backend) and an extensible plugin system.
-
-Key features:
-- HTTP/HTTPS proxy with traffic interception
-- Request replay (repeater) and automation (fuzzer)
-- Workflow system for multi-step automation
-- Security findings management
-- AI-powered assistant for attack suggestions
-- Extensive plugin SDK for customization
-
-## What is a Claude Skill?
-
-[Skills](https://www.anthropic.com/news/skills) are modular capabilities that extend Claude's functionality. Unlike slash commands that you invoke manually, skills are model-invoked—Claude autonomously decides when to use them based on your request.
-
-When you ask Claude to help with Caido plugin development, Claude discovers this skill, loads the comprehensive documentation, and provides expert guidance with code examples and references to official resources.
-
-## Project Structure
-
-```
-caido-plugin-skill/
-├── .github/
-│   └── workflows/
-│       └── release.yml       # Auto-creates releases with downloadable zip
-├── skills/
-│   └── caido-plugin-dev/     # The actual skill (Claude discovers this)
-│       └── SKILL.md          # Comprehensive Caido plugin development guide
-├── README.md                 # This file - user documentation
-└── LICENSE                   # MIT License
-```
-
-## Skill Content
-
-The SKILL.md file contains:
-- 1000+ lines of comprehensive Caido plugin development documentation
-- Complete SDK API coverage with code examples
-- Architecture patterns and best practices
-- Links to official documentation (always up-to-date)
-- References to popular community plugins
-- Troubleshooting and common issues
-
-## SDK References (Always Current)
-
-The skill links to official documentation to ensure you always have the latest API information:
-
-- [Frontend SDK](https://developer.caido.io/reference/sdks/frontend/)
-- [Backend SDK](https://developer.caido.io/reference/sdks/backend/)
-- [Workflow SDK](https://developer.caido.io/reference/sdks/workflow/)
-- [Runtime Modules](https://developer.caido.io/reference/modules/)
-- [Developer Portal](https://developer.caido.io/)
-- [LLM-Optimized Docs](https://developer.caido.io/llms.txt)
-
-## Popular Plugin Examples
-
-The skill references these community plugins as learning resources:
-
-- **plugin-demo** - Official demo with Vue.js and TypeScript
-- **Notebook** - Tutorial example with data persistence
-- **quickssrf** - SSRF detection with external API integration
-- **scanner** - Vulnerability scanning capabilities
-- **shift** - AI integration into Caido
-- **authmatrix** - Multi-user authorization testing
-- **workflows** - Community automation workflows
-
 ## Learn More
 
-- [Claude Skills](https://www.anthropic.com/news/skills) - Official announcement from Anthropic
-- [Claude Code Skills Documentation](https://docs.claude.com/en/docs/claude-code/skills)
-- [Claude Code Plugins Documentation](https://docs.claude.com/en/docs/claude-code/plugins)
 - [Caido Developer Docs](https://developer.caido.io/)
-- [Caido Community GitHub](https://github.com/caido-community)
-- [GitHub Issues](https://github.com/caido-community/caido-plugin-skill/issues)
-
-## Contributing
-
-Contributions are welcome! If you find issues with the documentation or want to add examples:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes to `skills/caido-plugin-dev/SKILL.md`
-4. Submit a pull request
-
-## License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- [Caido](https://caido.io/) - For creating an amazing security testing platform
-- [Caido Community](https://github.com/caido-community) - For excellent plugin examples
-- Claude Code team - For the skills system
+- [Claude Code Skills Documentation](https://docs.claude.com/en/docs/claude-code/skills)

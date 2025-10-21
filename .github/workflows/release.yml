@@ -2,8 +2,8 @@ name: Create Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -25,11 +25,7 @@ jobs:
       - name: Get tag name
         id: tag
         run: |
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          else
-            echo "tag=manual-build-$(date +%Y%m%d-%H%M%S)" >> $GITHUB_OUTPUT
-          fi
+          echo "tag=release-$(date +%Y%m%d-%H%M%S)" >> $GITHUB_OUTPUT
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
