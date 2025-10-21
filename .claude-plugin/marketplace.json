@@ -1,0 +1,10 @@
+{
+  "name": "Caido Plugin Development",
+  "description": "Expert Caido plugin development with comprehensive SDK documentation",
+  "version": "1.0.0",
+  "author": "rez0",
+  "url": "https://github.com/rez0/caido-plugin-skill",
+  "category": "development",
+  "tags": ["caido", "security", "pentesting", "plugin-development", "web-security"],
+  "readme": "README.md"
+}

@@ -1,0 +1,64 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create skill zip
+        run: |
+          cd skills/caido-plugin-dev
+          zip -r ../../caido-plugin-dev.zip .
+          cd ../..
+
+      - name: Get tag name
+        id: tag
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=manual-build-$(date +%Y%m%d-%H%M%S)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: Release ${{ steps.tag.outputs.tag }}
+          body: |
+            ## Caido Plugin Development Skill
+
+            Download `caido-plugin-dev.zip` and extract to your Claude Code skills directory.
+
+            ### Installation
+
+            **Global Installation:**
+            ```bash
+            cd ~/.claude/skills
+            unzip /path/to/caido-plugin-dev.zip -d caido-plugin-dev
+            ```
+
+            **Project-Specific Installation:**
+            ```bash
+            cd /path/to/your/project/.claude/skills
+            unzip /path/to/caido-plugin-dev.zip -d caido-plugin-dev
+            ```
+
+            See the [README](https://github.com/${{ github.repository }}) for full installation instructions.
+          files: |
+            caido-plugin-dev.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

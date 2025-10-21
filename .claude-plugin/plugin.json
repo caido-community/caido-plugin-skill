@@ -1,0 +1,31 @@
+{
+  "name": "caido-plugin-dev",
+  "version": "1.0.0",
+  "description": "Comprehensive Caido plugin development skill with SDK documentation, examples, and best practices",
+  "author": "rez0",
+  "type": "skill",
+  "skills": [
+    {
+      "name": "caido-plugin-dev",
+      "path": "skills/caido-plugin-dev",
+      "description": "Expert guidance for developing Caido plugins (frontend, backend, workflow) with SDK coverage and community examples"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rez0/caido-plugin-skill"
+  },
+  "license": "MIT",
+  "keywords": [
+    "caido",
+    "plugin",
+    "security",
+    "web-security",
+    "pentesting",
+    "sdk",
+    "development",
+    "frontend",
+    "backend",
+    "workflow"
+  ]
+}
