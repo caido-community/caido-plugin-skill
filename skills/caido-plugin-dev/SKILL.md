@@ -96,6 +96,14 @@ Plugins can combine frontend and backend components in a single package. In most
 
 ## Quick Start: Creating a New Plugin
 
+**IMPORTANT:** Always start a new Caido plugin project using the official starter CLI:
+
+```bash
+pnpm create @caido-community/plugin
+```
+
+This is the standard and recommended way to initialize any new Caido plugin project.
+
 ### Prerequisites
 
 - Node.js 18+ or 20+
@@ -1068,6 +1076,17 @@ pnpm build
 2. Navigate to Plugins
 3. Click "Install from file"
 4. Select `plugin_package.zip`
+
+### Pre-Commit Checks
+
+**IMPORTANT:** Always run these commands before committing your code:
+
+```bash
+pnpm lint
+pnpm typecheck
+```
+
+These commands ensure code quality and catch type errors before they make it into version control. Make it a habit to run both commands before every commit.
 
 ### Debugging
 
