@@ -10,9 +10,10 @@ description: Comprehensive skill for developing Caido plugins (frontend, backend
 Caido is a lightweight web security auditing toolkit designed for penetration testing and vulnerability assessment. This skill provides comprehensive guidance for developing Caido plugins using the official SDK ecosystem.
 
 **Key Resources:**
-- Main Docs: https://docs.caido.io/llms.txt
+- Main Docs: https://docs.caido.io/
 - Developer Docs: https://developer.caido.io/
-- LLM-Optimized Docs: https://developer.caido.io/llms.txt
+- LLM-Optimized Docs (Full): https://developer.caido.io/llms-full.txt
+- LLM-Optimized Docs (Summary): https://developer.caido.io/llms.txt
 - Community GitHub: https://github.com/caido-community
 
 ## About Caido
@@ -620,6 +621,61 @@ if (editor) {
 }
 ```
 
+### Slots and Extensions
+
+UI slots allow adding buttons, commands, or custom components to predefined locations in Caido's interface:
+
+```typescript
+import { FooterSlot } from "@caido/sdk-frontend";
+
+// Add a button to the footer
+sdk.ui.addToSlot(FooterSlot.FooterSlotPrimary, {
+  component: MyCustomButton,
+  props: { label: "My Action" }
+});
+```
+
+Available slot locations include footer areas and replay toolbars. Pass slot identifiers to `addToSlot()` to specify placement.
+
+### Custom Request View Modes
+
+Custom request view modes display requests in alternative formats across multiple pages (HTTP History, Replay, Search, etc.):
+
+```typescript
+// Register a custom view mode
+sdk.ui.addRequestViewMode({
+  id: "my-custom-view",
+  name: "Custom View",
+  component: MyViewComponent
+});
+```
+
+The Vue component receives `sdk`, `request`, and optionally `requestDraft` props.
+
+### Command Palette Custom Views
+
+The command palette supports pushing custom Vue components for multi-step wizards and custom search interfaces:
+
+```typescript
+// Push a custom view to the command palette
+sdk.commandPalette.pushView({
+  component: MyCustomSearchComponent
+});
+```
+
+Components automatically receive the SDK as a prop and can emit events and update state reactively.
+
+### Keyboard Shortcuts
+
+Register keyboard shortcuts for commands:
+
+```typescript
+sdk.shortcuts.register("my-plugin.action", {
+  key: "ctrl+shift+a",
+  mac: "cmd+shift+a"
+});
+```
+
 **Complete Frontend SDK Reference:** https://developer.caido.io/reference/sdks/frontend/
 
 ## Backend Plugin Development
@@ -999,24 +1055,232 @@ Backend plugins run in a QuickJS environment with Node.js-compatible modules:
 
 **Available Modules:** https://developer.caido.io/reference/modules/
 
-**Core Modules:**
-- `fs`, `fs/promise` - File system operations
-- `net` - Networking and sockets
-- `caido:http` - Custom fetch implementation
-- `process` - Process information
-- `child_process` - Spawn subprocesses
-- `crypto` - Cryptographic operations
-- `buffer` - Binary data handling
-- `stream` - Streaming APIs
-- `path` - Path operations
-- `os` - Operating system info
-- `sqlite` - Database access
-- `url` - URL utilities
+### HTTP Module (`caido:http`)
+
+Provides Fetch API implementations:
+
+```typescript
+import { fetch, Request, Response, Headers } from "caido:http";
+
+// Make HTTP requests
+const response = await fetch("https://api.example.com/data", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ key: "value" })
+});
+
+const data = await response.json();
+
+// Work with Headers
+const headers = new Headers();
+headers.set("Authorization", "Bearer token");
+headers.append("Accept", "application/json");
+```
+
+Response methods: `text()`, `json()`, `arrayBuffer()`, `blob()`, `bytes()`
+
+### FileSystem Module (`llrt/fs`)
+
+```typescript
+import { readFile, writeFile, mkdir, stat, unlink } from "llrt/fs";
+
+// Read file
+const content = await readFile("/path/to/file.txt", "utf-8");
+
+// Write file
+await writeFile("/path/to/output.txt", "content");
+
+// Create directory
+await mkdir("/path/to/dir", { recursive: true });
+
+// Check file exists
+const stats = await stat("/path/to/file");
+```
+
+Constants: `F_OK`, `R_OK`, `W_OK`, `X_OK` for access checks
+
+### Child Process Module
+
+```typescript
+import { spawn } from "child_process";
+
+// Note: exec() is unavailable - use spawn with shell: true instead
+const proc = spawn("nmap", ["-sV", "target.com"], { shell: true });
+
+proc.stdout.on("data", (data) => {
+  sdk.console.log(data.toString());
+});
+
+proc.on("close", (code) => {
+  sdk.console.log(`Exited with code ${code}`);
+});
+```
+
+**Limitations:** Stream `pipe()` is not supported.
+
+### Crypto Module
+
+```typescript
+import { createHash, createHmac, randomBytes } from "crypto";
+
+// Hashing
+const hash = createHash("sha256").update("data").digest("hex");
+
+// HMAC
+const hmac = createHmac("sha256", "secret").update("data").digest("hex");
+
+// Random bytes
+const bytes = randomBytes(16);
+```
+
+### Buffer Module
+
+```typescript
+import { Buffer } from "buffer";
+
+const buf = Buffer.from("hello", "utf-8");
+const base64 = buf.toString("base64");
+const hex = buf.toString("hex");
+
+// Concatenate buffers
+const combined = Buffer.concat([buf1, buf2]);
+```
+
+### Path Module
+
+```typescript
+import { join, resolve, dirname, basename, extname } from "path";
+
+const fullPath = join("/base", "dir", "file.txt");
+const dir = dirname("/path/to/file.txt");  // "/path/to"
+const file = basename("/path/to/file.txt"); // "file.txt"
+const ext = extname("file.txt");            // ".txt"
+```
+
+### Process Module
+
+```typescript
+import process from "process";
+
+const cwd = process.cwd();
+const apiKey = process.env.API_KEY;
+```
+
+### OS Module
+
+```typescript
+import os from "os";
+
+const platform = os.platform();  // "darwin", "linux", "win32"
+const home = os.homedir();
+const tmp = os.tmpdir();
+```
+
+### SQLite Module
+
+```typescript
+import { Database } from "sqlite";
+
+const db = new Database("/path/to/db.sqlite");
+const stmt = db.prepare("SELECT * FROM users WHERE id = ?");
+const user = stmt.get(userId);
+
+// Transactions
+db.transaction(() => {
+  db.run("INSERT INTO users (name) VALUES (?)", "Alice");
+  db.run("INSERT INTO users (name) VALUES (?)", "Bob");
+});
+```
+
+### Timers Module
+
+```typescript
+// Available globally, no import needed
+const timeoutId = setTimeout(() => {
+  sdk.console.log("Delayed execution");
+}, 1000);
+
+const intervalId = setInterval(() => {
+  sdk.console.log("Repeated execution");
+}, 5000);
+
+clearTimeout(timeoutId);
+clearInterval(intervalId);
+```
+
+### Abort Module
+
+```typescript
+const controller = new AbortController();
+const signal = controller.signal;
+
+// Use with fetch
+fetch(url, { signal }).catch(err => {
+  if (err.name === "AbortError") {
+    sdk.console.log("Request was cancelled");
+  }
+});
+
+// Cancel the request
+controller.abort();
+```
 
 **Global Modules** (no import needed):
-- `console`, `timers`, `abort`, `dom-events`, `globals`
+- `console` - Logging
+- `timers` - setTimeout, setInterval
+- `abort` - AbortController, AbortSignal
+- `dom-events` - EventTarget, EventListener
 
-**Note:** Some modules use `caido:` prefix (e.g., `caido:http`)
+**Note:** Some modules use `caido:` prefix (e.g., `caido:http`, `caido:plugin`, `caido:utils`)
+
+## Working with Assets
+
+Static assets can be bundled with plugins and accessed at runtime. Configure assets in `caido.config.ts`:
+
+```typescript
+// caido.config.ts
+{
+  kind: 'backend',
+  id: 'my-plugin-backend',
+  root: './packages/backend',
+  assets: ['./assets/**/*']  // Glob patterns for assets
+}
+```
+
+### Accessing Assets at Runtime
+
+```typescript
+// Get an asset file
+const asset = await sdk.assets.get("path/to/file.txt");
+
+// Convert to different formats
+const text = asset.asString();           // Text content
+const json = asset.asJson<ConfigType>(); // Typed JSON
+const buffer = asset.asArrayBuffer();    // Binary data
+const stream = asset.asReadableStream(); // Stream chunks
+```
+
+Assets are read-only and bundled with the plugin package. Use `sdk.meta.assetsPath()` to get the assets directory path.
+
+## Handling Binary Data
+
+JavaScript's UTF-8 encoding can corrupt raw binary bytes. Use these patterns to preserve exact byte sequences:
+
+```typescript
+// Get raw bytes (preserves binary data)
+const rawBytes = request.getPath({ raw: true });  // Returns Uint8Array
+
+// Manipulate as needed
+const modified = new Uint8Array([...rawBytes, 0x00]);
+
+// Set back (preserves exact bytes)
+spec.setPath(modified);
+
+// For body data
+const bodyRaw = request.getBody()?.toRaw();  // Get raw bytes
+```
+
+**Important:** Use `.toText()` only when you need string representation. Use `.toRaw()` when preserving exact bytes is critical.
 
 ## Workflow SDK
 
@@ -1111,6 +1375,29 @@ Use `sdk.console` methods for logging:
 ### Plugin Signing
 
 Caido supports plugin signing for security. Refer to SDK documentation for signing requirements.
+
+### Developer Policy
+
+When publishing plugins to the Caido store, adhere to these requirements:
+
+**Prohibited:**
+- Obfuscated code
+- Malware or malicious functionality
+- Advertisements
+- Client-side telemetry without disclosure
+- Auto-updating without user consent
+- Loading internet assets without disclosure
+
+**Required Disclosures:**
+- Required payments or account creation
+- External service dependencies
+- Server-side telemetry (with privacy policy link)
+- Closed-source code status
+
+**Licensing:**
+- All plugins must include a LICENSE file
+- Respect original licenses of dependencies
+- Provide proper attribution for third-party code
 
 ## Popular Plugin Examples
 
@@ -1250,14 +1537,43 @@ try {
 - **Developer Docs:** https://developer.caido.io/
 - **Discord Community:** Active support and collaboration
 - **GitHub Issues:** Plugin-specific issues on respective repos
-- **LLM Docs:** https://developer.caido.io/llms.txt for AI assistance
+- **LLM Docs:** https://developer.caido.io/llms-full.txt for AI assistance
+
+## AI-Assisted Development
+
+### Cursor IDE Integration
+
+Cursor IDE supports loading Caido documentation directly:
+
+1. Open Cursor settings
+2. Navigate to "Add New Custom Docs"
+3. Add URL: `https://developer.caido.io/`
+
+This enables Cursor's AI to reference Caido SDK documentation when assisting with plugin development.
+
+### LLM Documentation Endpoints
+
+Caido provides optimized documentation for AI/LLM consumption:
+
+- **Full Documentation:** https://developer.caido.io/llms-full.txt
+  - Complete SDK reference and guides
+  - Best for comprehensive development assistance
+
+- **Summary Documentation:** https://developer.caido.io/llms.txt
+  - Condensed overview of key concepts
+  - Best for quick reference and lighter context
+
+### Custom GPT
+
+A custom GPT trained on Caido resources is available for high-accuracy answers to development questions. Check the Caido Discord or documentation for access.
 
 ## Quick Reference Links
 
 **Official Documentation:**
 - Developer Portal: https://developer.caido.io/
 - Main Docs: https://docs.caido.io/
-- LLM-Optimized Docs: https://developer.caido.io/llms.txt
+- LLM-Optimized Docs (Full): https://developer.caido.io/llms-full.txt
+- LLM-Optimized Docs (Summary): https://developer.caido.io/llms.txt
 
 **SDK References (Always Check for Latest APIs):**
 - Frontend SDK: https://developer.caido.io/reference/sdks/frontend/
@@ -1270,8 +1586,11 @@ try {
 - manifest.json: https://developer.caido.io/reference/manifest
 - plugin_packages.json: https://developer.caido.io/reference/plugin_packages.md
 
-**Guides:**
+**Guides (18 Frontend Guides Available):**
 - Getting Started: https://developer.caido.io/guides/
+- Frontend UI Guides: Pages, Commands, Dialogs, Shortcuts
+- Data Persistence Guides: Storage, Settings
+- Feature Integration: HTTPQL, Workflows
 - Repository Setup: https://developer.caido.io/guides/distribution/repository
 - Store Submission: https://developer.caido.io/guides/distribution/store
 
